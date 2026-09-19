@@ -25,7 +25,7 @@ int main() {
             break;
 
         case '/':
-            if (num2 != 0) {
+            if (num2 != 0.0) {
                 result = num1 / num2;
                 printf("Result: %.2lf\n", result);
             } else {
