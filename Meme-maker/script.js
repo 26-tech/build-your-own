@@ -1,25 +1,72 @@
-const generateMemeBtn = document.querySelector(".meme-generator .generate-meme-btn");
-const memeImage = document.querySelector(".meme-generator img");
-const memeTitle= document.querySelector(".meme-generator .meme-title");
-const memeAuthor= document.querySelector(".meme-generator .meme-author");
+const fontSize = document.getElementById("fontSize");
+const textColor = document.getElementById("textColor");
+const topY= document.getElementById("topY");
+const bottomY= document.getElementById("bottomY");
 
-const updateDetails = (url,title,author)=>{
-    memeImage.setAttribute("src",url);
-    memeTitle.innerHTML=title;
-    memeAuthor.innerHTML=`Meme by: ${author}`;
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const topText = document.getElementById("topText");
+const bottomText = document.getElementById("bottomText");
+const templates = document.querySelectorAll(".template");
+
+let currentImage = null;
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (currentImage) {
+    ctx.drawImage(currentImage, 0, 0, canvas.width, canvas.height);
+  }
+  ctx.font = fontSize.value + "px Impact";
+  ctx.fillStyle = textColor.value;
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 4;
+  ctx.textAlign = "center";
+  ctx.strokeText(topText.value, 250, Number(topY.value));
+  ctx.fillText(topText.value, 250, Number(topY.value));
+  ctx.strokeText(bottomText.value, 250, Number(bottomY.value));
+  ctx.fillText(bottomText.value, 250, Number(bottomY.value));
 }
 
 
-const generateMeme= ()=>{
-    fetch("https://meme-api.com/gimme/wholesomememes")
-    .then((response)=>response.json())
-    .then((data)=>{
-        updateDetails(data.url,data.title,data.author)
-    })
+templates.forEach((img) => {
+  img.addEventListener("click", () => {
+    currentImage = img;
+    draw();
+  });
+});
+
+topText.addEventListener("input", draw);
+bottomText.addEventListener("input", draw);
+[fontSize, textColor, topY, bottomY].forEach((el)=>{
+    el.addEventListener("input", draw);
+});
+const downloadBtn = document.getElementById("downloadBtn");
+
+downloadBtn.addEventListener("click",() =>{
+    const link = document.createElement("a");
+    link.download = "my-meme.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+});
+const saveBtn = document.getElementById("saveBtn");
+const myMemes = document.getElementById("myMemes");
+
+let saved = JSON.parse(localStorage.getItem("memes")) || [];
+
+function showSaved() {
+  myMemes.innerHTML = "";
+  saved.forEach((src) => {
+    const img = document.createElement("img");
+    img.src = src;
+    img.width = 150;
+    myMemes.appendChild(img);
+  });
 }
 
+saveBtn.addEventListener("click", () => {
+  saved.push(canvas.toDataURL("image/jpeg", 0.7));
+  localStorage.setItem("memes", JSON.stringify(saved));
+  showSaved();
+});
 
-
-generateMemeBtn.addEventListener("click",generateMeme);
-
-generateMeme();
+showSaved();
