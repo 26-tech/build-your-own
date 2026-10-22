@@ -1,18 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meme Generator</title>
-    <link rel="stylesheet" href="style.css">
-</head>    
+  <meta charset="UTF-8">
+  <title>Meme Maker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 <body>
-    <div class="meme-generator">
-        <button class="generate-meme-btn">Generate Meme</button>
-        <h2 class="meme-title">Loading...</h2>
-        <img src="" alt="">
-        <div class="meme-author"></div>
-    </div>
-    <script src="script.js"></script>
+  <h1>Meme Maker</h1>
+  <div class="gallery">
+    <img src="images/t1.jpg" class="template">
+    <img src="images/t2.jpg" class="template">
+    <img src="images/t3.jpg" class="template">
+  </div>
+  <input id="topText" placeholder="Top text">
+  <input id="bottomText" placeholder="Bottom text">
+  <br>
+  Size: <input type="range" id="fontSize" min="20" max="80" value="40">
+  Color: <input type="color" id="textColor" value="#ffffff">
+  Top Y: <input type="range" id="topY" min="30" max="470" value="50">
+  BottomY: <input type="range" id="bottomY" min="30" max="470" value="470">
+  <br>
+  <canvas id="canvas" width="500" height="500"></canvas>
+  <br>
+  <button id="downloadBtn">Download Meme</button>
+  <button id="saveBtn">Save to My Memes</button>
+  <h2>My Memes</h2>
+  <div id="myMemes"></div>
+  <script src="script.js"></script>
 </body>
 </html>
