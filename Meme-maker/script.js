@@ -70,3 +70,38 @@ saveBtn.addEventListener("click", () => {
 });
 
 showSaved();
+const gallery = document.querySelector(".gallery");
+
+fetch("https://api.imgflip.com/get_memes")
+  .then((response) => response.json())
+  .then((result) => {
+    result.data.memes.forEach((meme) => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = meme.url;
+      img.alt = meme.name;
+      img.className = "template";
+      img.addEventListener("click", () => {
+        currentImage = img;
+        draw();
+      });
+      gallery.appendChild(img);
+    });
+  });
+  const upload = document.getElementById("upload");
+
+upload.addEventListener("change", () => {
+  const file = upload.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      currentImage = img;
+      draw();
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+});
